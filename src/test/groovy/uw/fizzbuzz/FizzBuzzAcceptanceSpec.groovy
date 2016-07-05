@@ -2,6 +2,7 @@ package uw.fizzbuzz
 
 import org.junit.Rule
 import spock.lang.Specification
+import spock.lang.Unroll
 import uk.org.lidalia.test.SystemOutputRule
 
 class FizzBuzzAcceptanceSpec extends Specification {
@@ -12,18 +13,22 @@ class FizzBuzzAcceptanceSpec extends Specification {
     def 'prints result to console'() {
 
         when:
-            FizzBuzz.main([2] as String[])
+            FizzBuzz.main(['2'] as String[])
 
         then:
             console.systemOut == '1\n2\n'
     }
 
-    def 'defaults to printing 100 lines'() {
+    @Unroll
+    def 'defaults to printing 100 lines when args are #args'() {
 
         when:
-            FizzBuzz.main([] as String[])
+            FizzBuzz.main(args as String[])
 
         then:
             console.systemOut.readLines().size() == 100
+
+        where:
+            args << [null, [], ['not a number']]
     }
 }

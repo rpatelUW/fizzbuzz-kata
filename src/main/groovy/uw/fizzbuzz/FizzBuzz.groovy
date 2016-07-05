@@ -5,6 +5,30 @@ import groovy.transform.CompileStatic
 @CompileStatic
 class FizzBuzz {
 
+    private final LinkedHashMap<Integer, String> mappings
+
+    FizzBuzz(LinkedHashMap<Integer, String> mappings = [(3): 'Fizz', (5): 'Buzz']) {
+        this.mappings = mappings
+    }
+
+    List<String> calculate(Integer end) {
+
+        (1..end).collect { transform(it) }
+    }
+
+    String transform(int number) {
+        stringFor(number) ?: number.toString()
+    }
+
+    private String stringFor(int number) {
+        mappings
+            .findAll { divisor, stringReplacement ->
+                number % divisor == 0
+            }
+            .values()
+            .join('')
+    }
+
     static void main(String[] args) {
 
         def lastNumber = defaulted(args)
@@ -15,29 +39,10 @@ class FizzBuzz {
     }
 
     static Integer defaulted(String[] args) {
-        if (args) {
+        try {
             args[0].toInteger()
-        } else {
+        } catch (Exception ignored) {
             100
-        }
-    }
-
-    List<String> calculate(Integer end) {
-
-        (1..end).collect { number ->
-            transform(number)
-        }
-    }
-
-    private String transform(int number) {
-        if (number % 3 == 0 && number % 5 == 0) {
-            'FizzBuzz'
-        } else if (number % 3 == 0) {
-            'Fizz'
-        } else if (number % 5 == 0) {
-            'Buzz'
-        } else {
-            number.toString()
         }
     }
 }
