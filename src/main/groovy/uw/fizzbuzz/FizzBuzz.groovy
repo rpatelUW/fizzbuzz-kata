@@ -4,15 +4,40 @@ import groovy.transform.CompileStatic
 
 @CompileStatic
 class FizzBuzz {
-    List<String> calculate() {
-        def result = []
-        for (int x = 1; x < 11; x++) {
-            if (x % 3 == 0) {
-                result.add('Fizz')
-            } else {
-                result.add(x.toString())
-            }
+
+    static void main(String[] args) {
+
+        def lastNumber = defaulted(args)
+
+        new FizzBuzz().calculate(lastNumber).each {
+            println(it)
         }
-        return result
+    }
+
+    static Integer defaulted(String[] args) {
+        if (args) {
+            args[0].toInteger()
+        } else {
+            100
+        }
+    }
+
+    List<String> calculate(Integer end) {
+
+        (1..end).collect { number ->
+            transform(number)
+        }
+    }
+
+    private String transform(int number) {
+        if (number % 3 == 0 && number % 5 == 0) {
+            'FizzBuzz'
+        } else if (number % 3 == 0) {
+            'Fizz'
+        } else if (number % 5 == 0) {
+            'Buzz'
+        } else {
+            number.toString()
+        }
     }
 }
